@@ -1,0 +1,45 @@
+#! /usr/bin/env python3
+from platform import python_version
+import click
+import os
+import json
+
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@click.argument("name")
+def new(name):
+    os.makedirs(f"{os.getcwd()}/{name}/src")
+    description = input("Please enter a description for your project: ")
+    version = input("Please enter the version of your project: ")
+    main_entrypoint = input(
+        "Please enter the name of the file that will be the main entrypoint in your project: "
+    )
+    configdata = {
+        "name": name,
+        "description": description,
+        "version": version,
+        "dependencies": [],
+        "python": python_version(),
+        "main_entrypoint": main_entrypoint,
+    }
+    configfile = open(f"{os.getcwd()}/{name}/luggage.json", mode="x")
+    json.dump(configdata, configfile)
+    configfile.close()
+    mainfile = open(f"{os.getcwd()}/{name}/src/{main_entrypoint}", mode="x")
+    mainfile.write("print('hello world!')")
+    mainfile.close()
+
+
+@cli.command()
+def run():
+    main_entrypoint = json.load(open(f"{os.getcwd()}/luggage.json"))["main_entrypoint"]
+    os.system(f"python3 {os.getcwd()}/src/{main_entrypoint}")
+
+
+if __name__ == "__main__":
+    cli()

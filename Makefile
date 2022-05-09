@@ -1,2 +1,2 @@
 install:
-  cp bin/* ~/.local/bin
+	@cp bin/* ~/.local/bin
