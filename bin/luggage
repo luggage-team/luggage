@@ -3,6 +3,7 @@ from platform import python_version
 import click
 import os
 import json
+from rich import print
 
 
 @click.group()
@@ -74,6 +75,15 @@ def generate_readme():
         outputfile = open(f"{os.getcwd()}/README.md", mode="w")
     outputfile.write(output)
     outputfile.close()
+
+
+@cli.command()
+def install_project():
+    config = json.load(open(f"{os.getcwd()}/luggage.json"))
+    print("[bold]Installing dependencies[bold]")
+    for package in config["dependencies"]:
+        os.system(f"python3 -m pip install {package}")
+    print("[bold]done[/bold]")
 
 
 if __name__ == "__main__":
