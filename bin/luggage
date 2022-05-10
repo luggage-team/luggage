@@ -63,5 +63,18 @@ def uninstall(name):
     configfile.close()
 
 
+@cli.command()
+def generate_readme():
+    config = json.load(open(f"{os.getcwd()}/luggage.json"))
+    output = f"""# {config['name']} - {config['version']}
+{config['description']}"""
+    try:
+        outputfile = open(f"{os.getcwd()}/README.md", mode="x")
+    except FileExistsError:
+        outputfile = open(f"{os.getcwd()}/README.md", mode="w")
+    outputfile.write(output)
+    outputfile.close()
+
+
 if __name__ == "__main__":
     cli()
