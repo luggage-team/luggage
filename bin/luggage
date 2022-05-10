@@ -52,5 +52,16 @@ def install(name):
     configfile.close()
 
 
+@cli.command()
+@click.argument("name")
+def uninstall(name):
+    config = json.load(open(f"{os.getcwd()}/luggage.json"))
+    config["dependencies"].remove(name)
+    os.system(f"python3 -m pip uninstall {name}")
+    configfile = open(f"{os.getcwd()}/luggage.json", mode="w")
+    json.dump(config, configfile)
+    configfile.close()
+
+
 if __name__ == "__main__":
     cli()
