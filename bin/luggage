@@ -41,5 +41,16 @@ def run():
     os.system(f"python3 {os.getcwd()}/src/{main_entrypoint}")
 
 
+@cli.command()
+@click.argument("name")
+def install(name):
+    config = json.load(open(f"{os.getcwd()}/luggage.json"))
+    config["dependencies"].append(name)
+    os.system(f"python3 -m pip install {name}")
+    configfile = open(f"{os.getcwd()}/luggage.json", mode="w")
+    json.dump(config, configfile)
+    configfile.close()
+
+
 if __name__ == "__main__":
     cli()
